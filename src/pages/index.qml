@@ -7,8 +7,8 @@ import "sections"
 CWindow {
     id: window
     visible: true
-    width: 1280
-    height: 720
+    width: 1200
+    height: 800
     minimumWidth: 640
     minimumHeight: 480
     title: "Chakra UI 组件库演示"
