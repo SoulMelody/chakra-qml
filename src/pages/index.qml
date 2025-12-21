@@ -8,7 +8,9 @@ CWindow {
     id: window
     visible: true
     width: 1280
-    height: 800
+    height: 720
+    minimumWidth: 640
+    minimumHeight: 480
     title: "Chakra UI 组件库演示"
 
     titleBarContent: Component {

@@ -99,6 +99,10 @@ if sys.platform == "win32":
     SystemParametersInfoW = user32.SystemParametersInfoW
     SystemParametersInfoW.argtypes = [c_uint, c_uint, c_void_p, c_uint]
     SystemParametersInfoW.restype = c_bool
+    
+    GetSystemMetrics = user32.GetSystemMetrics
+    GetSystemMetrics.argtypes = [c_int]
+    GetSystemMetrics.restype = c_int
 
     DwmExtendFrameIntoClientArea = dwmapi.DwmExtendFrameIntoClientArea
     DwmExtendFrameIntoClientArea.argtypes = [c_void_p, c_void_p]
@@ -117,7 +121,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
         QAbstractNativeEventFilter.__init__(self)
         self._current = 0
         self._edges = 0
-        self._margins = 8
+        self._margins = 4  # 减小调整大小的敏感区域
         self._clickTimer = 0
         self._hitTestList = []
         self._disabled = False
@@ -189,13 +193,15 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
                 params = cast(lParam, LPNCCALCSIZE_PARAMS).contents
                 
                 if isMaximum:
-                    borderX = 8
-                    borderY = 8
+                    # SM_CXFRAME=32, SM_CYFRAME=33, SM_CXPADDEDBORDER=92
+                    # 动态获取系统边框大小，支持不同DPI缩放
+                    frameX = GetSystemMetrics(32) + GetSystemMetrics(92)
+                    frameY = GetSystemMetrics(33) + GetSystemMetrics(92)
                     
-                    params.rgrc[0].left += borderX
-                    params.rgrc[0].top += borderY
-                    params.rgrc[0].right -= borderX
-                    params.rgrc[0].bottom -= borderY
+                    params.rgrc[0].left += frameX
+                    params.rgrc[0].top += frameY
+                    params.rgrc[0].right -= frameX
+                    params.rgrc[0].bottom -= frameY
                 
                 return True, 0
             return False, 0
@@ -212,14 +218,21 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
             nativeLocalPos = POINT(x_signed, y_signed)
             ScreenToClient(hwnd, byref(nativeLocalPos))
 
-            # 使用 Qt 窗口的实际大小
-            clientWidth = int(self.window().width())
-            clientHeight = int(self.window().height())
+            # 获取 DPI 缩放比例
+            pixelRatio = self.window().devicePixelRatio()
+            
+            # 将物理像素坐标转换为逻辑像素坐标
+            logicalX = nativeLocalPos.x / pixelRatio
+            logicalY = nativeLocalPos.y / pixelRatio
 
-            left = nativeLocalPos.x < self._margins
-            right = nativeLocalPos.x > clientWidth - self._margins
-            top = nativeLocalPos.y < self._margins
-            bottom = nativeLocalPos.y > clientHeight - self._margins
+            # Qt 窗口的逻辑像素大小
+            clientWidth = self.window().width()
+            clientHeight = self.window().height()
+
+            left = logicalX < self._margins
+            right = logicalX > clientWidth - self._margins
+            top = logicalY < self._margins
+            bottom = logicalY > clientHeight - self._margins
 
             result = 0
             if not self._isFullScreen() and not self._isMaximized():
