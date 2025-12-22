@@ -64,7 +64,15 @@ Popup {
     height: Math.min(mainColumn.implicitHeight, parent ? parent.height - 64 : 600)
 
     modal: true
-    closePolicy: (closeOnOverlayClick ? Popup.CloseOnPressOutside : Popup.NoAutoClose) | (closeOnEsc ? Popup.CloseOnEscape : Popup.NoAutoClose)
+    focus: true
+    closePolicy: {
+        var policy = Popup.NoAutoClose;
+        if (closeOnOverlayClick)
+            policy |= Popup.CloseOnPressOutside;
+        if (closeOnEsc)
+            policy |= Popup.CloseOnEscape;
+        return policy;
+    }
 
     // 进入/退出动画
     enter: Transition {

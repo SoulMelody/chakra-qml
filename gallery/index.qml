@@ -51,19 +51,19 @@ CWindow {
         }
     }
 
-    ScrollView {
+    Flickable {
+        id: mainFlickable
         anchors.fill: parent
-        contentWidth: availableWidth
+        contentWidth: width
+        contentHeight: contentColumn.height
+        boundsBehavior: Flickable.StopAtBounds
+        anchors.rightMargin: AppStyle.spacing1
+        clip: true
 
-        ScrollBar.vertical: CScrollBar {
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.rightMargin: 2
-            anchors.bottomMargin: 2
-        }
+        ScrollBar.vertical: CScrollBar {}
 
         Column {
+            id: contentColumn
             width: parent.width
             spacing: AppStyle.spacing8
             topPadding: AppStyle.spacing4
@@ -190,6 +190,8 @@ CWindow {
             title: "Dialog Title"
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             size: "md"
+            closeOnEsc: true
+            closeOnOverlayClick: false
 
             footer: Component {
                 Row {
@@ -215,6 +217,8 @@ CWindow {
             title: "Drawer 标题"
             placement: "right"
             edgeMargin: 6
+            closeOnOverlayClick: false
+            closeOnEsc: true
 
             Column {
                 spacing: AppStyle.spacing4
