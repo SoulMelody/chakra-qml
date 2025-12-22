@@ -38,10 +38,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Y-ASLant/chakra-ui-qml"
-Repository = "https://github.com/Y-ASLant/chakra-ui-qml"
-Documentation = "https://github.com/Y-ASLant/chakra-ui-qml/tree/main/docs"
-Issues = "https://github.com/Y-ASLant/chakra-ui-qml/issues"
+Homepage = "https://github.com/Y-ASLant/chakra-qml"
+Repository = "https://github.com/Y-ASLant/chakra-qml"
+Documentation = "https://github.com/Y-ASLant/chakra-qml/tree/main/docs"
+Issues = "https://github.com/Y-ASLant/chakra-qml/issues"
 
 [tool.setuptools]
 packages = ["chakra", "chakra.Chakra", "chakra.Chakra.fonts"]

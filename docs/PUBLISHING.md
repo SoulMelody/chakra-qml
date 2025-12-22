@@ -120,7 +120,7 @@ git push origin v0.1.0
 ```
 
 2. Create a GitHub release:
-   - Go to https://github.com/Y-ASLant/chakra-ui-qml/releases/new
+   - Go to https://github.com/Y-ASLant/chakra-qml/releases/new
    - Select the tag
    - Add release notes
    - Attach the wheel file
@@ -223,4 +223,4 @@ echo "Run: python -m twine upload dist/*"
 ## Support
 
 For questions or issues, open an issue at:
-https://github.com/Y-ASLant/chakra-ui-qml/issues
+https://github.com/Y-ASLant/chakra-qml/issues

@@ -91,4 +91,4 @@ CWindow {
 ## 详细文档
 
 访问项目仓库查看更多示例和文档：
-https://github.com/Y-ASLant/chakra-ui-qml
+https://github.com/Y-ASLant/chakra-qml
