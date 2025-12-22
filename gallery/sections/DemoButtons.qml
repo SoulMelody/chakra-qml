@@ -53,8 +53,8 @@ CCard {
             topPadding: AppStyle.spacing2
         }
 
-        Flow {
-            width: parent.width - AppStyle.spacing6 * 2
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing2
 
             CButton {
@@ -106,7 +106,8 @@ CCard {
             topPadding: AppStyle.spacing2
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing3
 
             CButton {

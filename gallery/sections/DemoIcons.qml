@@ -24,8 +24,8 @@ CCard {
             color: AppStyle.textSecondary
         }
 
-        Flow {
-            width: parent.width - AppStyle.spacing6 * 2
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Repeater {

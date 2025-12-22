@@ -33,7 +33,8 @@ CCard {
             topPadding: AppStyle.spacing2
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             CCard {
@@ -80,7 +81,8 @@ CCard {
             color: AppStyle.textSecondary
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             CCard {
@@ -117,7 +119,8 @@ CCard {
             topPadding: AppStyle.spacing4
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             CCard {
@@ -208,7 +211,8 @@ CCard {
             topPadding: AppStyle.spacing4
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             CCard {

@@ -1,0 +1,16 @@
+[project]
+name = "utils"
+version = "0.1.0"
+description = "Build utilities for Chakra QML"
+authors = [{ name = "ASLant" }]
+requires-python = ">=3.8"
+dependencies = [
+    "loguru",
+]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project.scripts]
+build-chakra = "utils:build"

@@ -18,10 +18,12 @@ CCard {
             color: AppStyle.textColor
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Outline"
@@ -29,12 +31,14 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "输入内容..."
                     variant: "outline"
                 }
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Filled"
@@ -42,12 +46,14 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "输入内容..."
                     variant: "filled"
                 }
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Flushed"
@@ -55,16 +61,19 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "输入内容..."
                     variant: "flushed"
                 }
             }
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Clearable"
@@ -72,12 +81,14 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "可清除..."
                     isClearable: true
                 }
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Max Length (10)"
@@ -85,6 +96,7 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "最多10字符"
                     maxLength: 10
                     isClearable: true
@@ -92,6 +104,7 @@ CCard {
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Password"
@@ -99,16 +112,19 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "Enter password..."
                     type: "password"
                 }
             }
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Invalid"
@@ -116,12 +132,14 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "错误状态"
                     isInvalid: true
                 }
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Disabled"
@@ -129,6 +147,7 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CInput {
+                    width: parent.width
                     placeholderText: "禁用状态"
                     isDisabled: true
                 }
@@ -143,10 +162,12 @@ CCard {
             topPadding: AppStyle.spacing4
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Basic"
@@ -154,12 +175,14 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CSelect {
+                    width: parent.width
                     model: ["Apple", "Banana", "Cherry", "Date", "Elderberry"]
                     placeholder: "Select fruit"
                 }
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Searchable"
@@ -167,6 +190,7 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CSelect {
+                    width: parent.width
                     model: ["Beijing", "Shanghai", "Guangzhou", "Shenzhen", "Hangzhou", "Nanjing", "Chengdu", "Wuhan"]
                     placeholder: "Search city..."
                     isSearchable: true
@@ -174,6 +198,7 @@ CCard {
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Filled"
@@ -181,6 +206,7 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CSelect {
+                    width: parent.width
                     model: ["Small", "Medium", "Large"]
                     placeholder: "Select size"
                     variant: "filled"
@@ -188,6 +214,7 @@ CCard {
             }
 
             Column {
+                width: 240
                 spacing: AppStyle.spacing2
                 Text {
                     text: "Disabled"
@@ -195,6 +222,7 @@ CCard {
                     color: AppStyle.textSecondary
                 }
                 CSelect {
+                    width: parent.width
                     model: ["Option A", "Option B"]
                     placeholder: "Disabled"
                     isDisabled: true

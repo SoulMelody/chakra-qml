@@ -24,7 +24,8 @@ CCard {
             color: AppStyle.textSecondary
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing3
 
             CBox {

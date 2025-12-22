@@ -19,13 +19,13 @@ qInstallMessageHandler(message_handler)
 app = QGuiApplication(sys.argv)
 QDir.setCurrent(str(Path(__file__).parent))
 
-import source.source_rc  # noqa
+# import source.source_rc  # noqa
 
 qmlRegisterType(CFrameless, "Chakra", 1, 0, "CFrameless")
 
 engine = QQmlApplicationEngine()
 engine.addImportPath("src")
-engine.load("src/pages/index.qml")
+engine.load("gallery/index.qml")
 
 if not engine.rootObjects():
     sys.exit(-1)

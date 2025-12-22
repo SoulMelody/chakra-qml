@@ -26,7 +26,8 @@ CCard {
             topPadding: AppStyle.spacing4
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing4
 
             Column {

@@ -249,6 +249,29 @@ See [tests/README.md](tests/README.md) for detailed testing documentation.
 
 MIT License - see [LICENSE](LICENSE) file for details
 
+## Development
+
+### Building from Source
+
+```bash
+# Install dependencies
+uv sync --group dev
+
+# Build QML module (auto-generate qmldir)
+uv run build-chakra
+
+# Package for distribution
+uv build
+
+# Install locally for testing
+uv add dist/chakra_qml-*.whl
+```
+
+The `build-chakra` command automatically:
+- Scans all `.qml` files in `src/Chakra/`
+- Detects singleton components (files with `pragma Singleton`)
+- Generates `qmldir` module definition
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

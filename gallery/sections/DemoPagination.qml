@@ -204,7 +204,8 @@ CCard {
             color: AppStyle.textSecondary
         }
 
-        Row {
+        CFlow {
+            width: parent.width
             spacing: AppStyle.spacing3
 
             CPagination {
@@ -269,7 +270,8 @@ CCard {
                 color: AppStyle.textColor
             }
 
-            Row {
+            CFlow {
+                width: parent.width
                 spacing: AppStyle.spacing2
 
                 CButton {
@@ -310,8 +312,9 @@ CCard {
             Repeater {
                 model: ["blue", "green", "purple", "pink", "teal"]
 
-                delegate: Row {
+                delegate: CFlow {
                     required property string modelData
+                    width: parent.width
                     spacing: AppStyle.spacing3
 
                     Text {
@@ -319,7 +322,6 @@ CCard {
                         font.pixelSize: AppStyle.fontSizeSm
                         color: AppStyle.textSecondary
                         width: 80
-                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     CPagination {
