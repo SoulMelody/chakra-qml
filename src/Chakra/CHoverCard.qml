@@ -52,8 +52,8 @@ Item {
     signal opened
     signal closed
 
-    implicitWidth: triggerLoader.implicitWidth
-    implicitHeight: triggerLoader.implicitHeight
+    implicitWidth: triggerLoader.item ? triggerLoader.item.implicitWidth : 0
+    implicitHeight: triggerLoader.item ? triggerLoader.item.implicitHeight : 0
 
     // 内部：缓存窗口根元素和位置
     property Item _windowRoot: null
@@ -100,23 +100,22 @@ Item {
     // 触发器
     Loader {
         id: triggerLoader
-        anchors.fill: parent
+    }
 
-        MouseArea {
-            id: triggerArea
-            anchors.fill: parent
-            hoverEnabled: true
-            enabled: !root.disabled
-            acceptedButtons: Qt.NoButton
+    MouseArea {
+        id: triggerArea
+        anchors.fill: triggerLoader
+        hoverEnabled: true
+        enabled: !root.disabled
+        acceptedButtons: Qt.NoButton
 
-            onContainsMouseChanged: {
-                if (containsMouse) {
-                    closeTimer.stop();
-                    openTimer.restart();
-                } else {
-                    openTimer.stop();
-                    closeTimer.restart();
-                }
+        onContainsMouseChanged: {
+            if (containsMouse) {
+                closeTimer.stop();
+                openTimer.restart();
+            } else {
+                openTimer.stop();
+                closeTimer.restart();
             }
         }
     }
