@@ -3,50 +3,24 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 
-/**
- * CButton - 按钮组件
- * 
- * 提供多种变体和颜色方案的按钮组件，支持图标、加载状态等。
- * 
- * @component
- * @example
- * CButton {
- *     text: "Click me"
- *     variant: "solid"
- *     colorScheme: "primary"
- *     leftIcon: "check"
- *     onClicked: console.log("Clicked!")
- * }
- * 
- * @property {string} variant - 按钮变体
- *   可选值: "solid" | "outline" | "ghost" | "link"
- *   默认值: "solid"
- * 
- * @property {string} colorScheme - 颜色方案
- *   可选值: "primary" | "blue" | "green" | "red" | "orange" | "purple" | "gray" | "teal" | "pink" | "cyan" | "yellow" | "success" | "warning" | "error"
- *   默认值: "primary"
- * 
- * @property {string} size - 尺寸
- *   可选值: "sm" | "md" | "lg"
- *   默认值: "md"
- * 
- * @property {bool} fullWidth - 是否全宽
- *   默认值: false
- * 
- * @property {string} leftIcon - 左侧图标名称
- *   默认值: ""
- * 
- * @property {string} rightIcon - 右侧图标名称
- *   默认值: ""
- * 
- * @property {bool} iconOnly - 仅图标按钮（无文字，正方形）
- *   默认值: false
- * 
- * @property {bool} isLoading - 加载状态，显示 spinner
- *   默认值: false
- */
+/*
+    CButton - 按钮组件
+
+    == 组件库特有属性 ==
+    variant     : 变体，可选 "solid" | "outline" | "ghost" | "link"，默认 "solid"
+    colorScheme : 颜色方案，默认 "primary"
+    size        : 尺寸，可选 "sm" | "md" | "lg"，默认 "md"
+    fullWidth   : 是否全宽，默认 false
+    leftIcon    : 左侧图标名称，默认 ""
+    rightIcon   : 右侧图标名称，默认 ""
+    iconOnly    : 仅图标按钮（无文字，正方形），默认 false
+    isLoading   : 加载状态，显示 spinner，默认 false
+*/
 Button {
     id: root
+
+    // 点击时获取焦点，让其他输入框失去焦点
+    focusPolicy: Qt.ClickFocus
 
     // 变体: solid, outline, ghost, link
     property string variant: "solid"
@@ -173,6 +147,13 @@ Button {
             return "transparent";
         }
 
+        Behavior on color {
+            ColorAnimation {
+                duration: AppStyle.durationNormal
+                easing.type: Easing.OutCubic
+            }
+        }
+
         border.width: root.variant === "outline" ? 1 : 0
         border.color: root.enabled ? AppStyle.borderColor : (AppStyle.isDark ? Qt.rgba(255, 255, 255, 0.1) : Qt.rgba(0, 0, 0, 0.1))
     }
@@ -182,12 +163,16 @@ Button {
         State {
             name: "pressed"
             when: root.pressed
-            PropertyChanges { root.scale: 0.96 }
+            PropertyChanges {
+                root.scale: 0.96
+            }
         },
         State {
             name: "normal"
             when: !root.pressed
-            PropertyChanges { root.scale: 1 }
+            PropertyChanges {
+                root.scale: 1
+            }
         }
     ]
 

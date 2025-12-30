@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chakra-qml"
-version = "0.0.5"
+version = "0.0.7"
 description = "A modern QML component library inspired by Chakra UI"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -31,17 +31,12 @@ dependencies = [
     "pyside6>=6.5.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "build>=1.2.2.post1",
-    "twine>=6.1.0",
-]
 
 [project.urls]
-Homepage = "https://github.com/Y-ASLant/chakra-ui-qml"
-Repository = "https://github.com/Y-ASLant/chakra-ui-qml"
-Documentation = "https://github.com/Y-ASLant/chakra-ui-qml/tree/main/docs"
-Issues = "https://github.com/Y-ASLant/chakra-ui-qml/issues"
+Homepage = "https://github.com/Y-ASLant/chakra-qml"
+Repository = "https://github.com/Y-ASLant/chakra-qml"
+Documentation = "https://github.com/Y-ASLant/chakra-qml/tree/main/docs"
+Issues = "https://github.com/Y-ASLant/chakra-qml/issues"
 
 [tool.setuptools]
 packages = ["chakra", "chakra.Chakra", "chakra.Chakra.fonts"]
@@ -57,4 +52,15 @@ chakra = "src"
 [tool.uv.workspace]
 members = [
     "examples",
+    "utils",
+]
+
+[tool.uv.sources]
+utils = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
+    "utils",
 ]

@@ -113,7 +113,8 @@ ItemDelegate {
 
         Behavior on color {
             ColorAnimation {
-                duration: 100
+                duration: AppStyle.durationFast
+                easing.type: Easing.OutCubic
             }
         }
     }
@@ -122,7 +123,8 @@ ItemDelegate {
     scale: pressed && !isDisabled ? 0.98 : 1
     Behavior on scale {
         NumberAnimation {
-            duration: 50
+            duration: AppStyle.durationInstant
+            easing.type: Easing.OutCubic
         }
     }
 }

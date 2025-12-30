@@ -64,7 +64,15 @@ Popup {
     height: Math.min(mainColumn.implicitHeight, parent ? parent.height - 64 : 600)
 
     modal: true
-    closePolicy: (closeOnOverlayClick ? Popup.CloseOnPressOutside : Popup.NoAutoClose) | (closeOnEsc ? Popup.CloseOnEscape : Popup.NoAutoClose)
+    focus: true
+    closePolicy: {
+        var policy = Popup.NoAutoClose;
+        if (closeOnOverlayClick)
+            policy |= Popup.CloseOnPressOutside;
+        if (closeOnEsc)
+            policy |= Popup.CloseOnEscape;
+        return policy;
+    }
 
     // 进入/退出动画
     enter: Transition {
@@ -73,6 +81,7 @@ Popup {
             from: 0
             to: 1
             duration: AppStyle.durationNormal
+            easing.type: Easing.OutCubic
         }
         NumberAnimation {
             property: "scale"
@@ -89,12 +98,14 @@ Popup {
             from: 1
             to: 0
             duration: AppStyle.durationFast
+            easing.type: Easing.OutCubic
         }
         NumberAnimation {
             property: "scale"
             from: 1
             to: 0.95
             duration: AppStyle.durationFast
+            easing.type: Easing.OutCubic
         }
     }
 
@@ -106,6 +117,7 @@ Popup {
         Behavior on opacity {
             NumberAnimation {
                 duration: AppStyle.durationNormal
+                easing.type: Easing.OutCubic
             }
         }
     }
@@ -117,6 +129,7 @@ Popup {
         Behavior on color {
             ColorAnimation {
                 duration: AppStyle.durationNormal
+                easing.type: Easing.OutCubic
             }
         }
     }

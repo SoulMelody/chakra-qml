@@ -13,6 +13,7 @@ import QtQuick.Controls
     title               : 标题文本，默认 ""
     showCloseButton     : 是否显示关闭按钮，默认 true
     closeOnOverlayClick : 是否点击遮罩关闭，默认 true
+    closeOnEsc          : 是否按 ESC 关闭，默认 true
     footer              : 底部内容（Component 类型）
 
     == 信号 ==
@@ -39,6 +40,9 @@ Popup {
 
     // 是否点击遮罩关闭
     property bool closeOnOverlayClick: true
+
+    // 是否按 ESC 关闭
+    property bool closeOnEsc: true
 
     // 内容
     default property alias content: contentContainer.data
@@ -82,7 +86,15 @@ Popup {
     height: isVertical ? size : (parent ? parent.height - edgeMargin * 2 : 600)
 
     modal: true
-    closePolicy: closeOnOverlayClick ? (Popup.CloseOnPressOutside | Popup.CloseOnEscape) : Popup.CloseOnEscape
+    focus: true
+    closePolicy: {
+        var policy = Popup.NoAutoClose;
+        if (closeOnOverlayClick)
+            policy |= Popup.CloseOnPressOutside;
+        if (closeOnEsc)
+            policy |= Popup.CloseOnEscape;
+        return policy;
+    }
 
     // 进入动画
     enter: Transition {
@@ -113,6 +125,7 @@ Popup {
         Behavior on opacity {
             NumberAnimation {
                 duration: AppStyle.durationNormal
+                easing.type: Easing.OutCubic
             }
         }
     }
@@ -124,6 +137,7 @@ Popup {
         Behavior on color {
             ColorAnimation {
                 duration: AppStyle.durationNormal
+                easing.type: Easing.OutCubic
             }
         }
     }
@@ -181,29 +195,25 @@ Popup {
         }
 
         // Body（可滚动内容区）
-        ScrollView {
+        Flickable {
             id: bodyScroll
             anchors.top: headerBorder.bottom
             anchors.topMargin: AppStyle.spacing4
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: footerBorder.top
-            contentWidth: availableWidth
+            contentWidth: width
+            contentHeight: contentContainer.height
+            boundsBehavior: Flickable.StopAtBounds
             clip: true
             z: 1
 
-            ScrollBar.vertical: CScrollBar {
-                parent: bodyScroll
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.rightMargin: 2
-            }
+            ScrollBar.vertical: CScrollBar {}
 
             Item {
                 id: contentContainer
-                width: bodyScroll.availableWidth
-                implicitHeight: childrenRect.height
+                width: bodyScroll.width
+                height: childrenRect.height
 
                 readonly property int contentPadding: AppStyle.spacing4
                 readonly property int targetWidth: contentContainer.width - contentContainer.contentPadding * 2

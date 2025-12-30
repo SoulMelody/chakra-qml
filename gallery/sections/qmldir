@@ -1,0 +1,20 @@
+module sections
+
+DemoButtons DemoButtons.qml
+DemoInputs DemoInputs.qml
+DemoSelectors DemoSelectors.qml
+DemoSegmentedControl DemoSegmentedControl.qml
+DemoFeedback DemoFeedback.qml
+DemoBadgeTags DemoBadgeTags.qml
+DemoProgress DemoProgress.qml
+DemoCards DemoCards.qml
+DemoPagination DemoPagination.qml
+DemoIcons DemoIcons.qml
+DemoIconsAll DemoIconsAll.qml
+DemoMenu DemoMenu.qml
+DemoScrollArea DemoScrollArea.qml
+DemoOverlays DemoOverlays.qml
+DemoActionBar DemoActionBar.qml
+DemoLayouts DemoLayouts.qml
+DemoTooltip DemoTooltip.qml
+DemoHoverCard DemoHoverCard.qml

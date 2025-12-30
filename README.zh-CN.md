@@ -249,6 +249,29 @@ python tests/run_python_tests.py
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
 
+## 开发
+
+### 从源码构建
+
+```bash
+# 安装依赖
+uv sync --group dev
+
+# 构建 QML 模块（自动生成 qmldir）
+uv run build-chakra
+
+# 打包发布
+uv build
+
+# 本地安装测试
+uv add dist/chakra_qml-*.whl
+```
+
+`build-chakra` 命令会自动：
+- 扫描 `src/Chakra/` 中的所有 `.qml` 文件
+- 检测单例组件（包含 `pragma Singleton` 的文件）
+- 生成 `qmldir` 模块定义文件
+
 ## 贡献
 
 欢迎贡献！请随时提交 Pull Request。

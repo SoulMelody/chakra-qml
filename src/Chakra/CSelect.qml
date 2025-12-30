@@ -94,6 +94,7 @@ ComboBox {
         Behavior on rotation {
             NumberAnimation {
                 duration: AppStyle.durationFast
+                easing.type: Easing.OutCubic
             }
         }
     }
@@ -119,6 +120,7 @@ ComboBox {
         Behavior on border.color {
             ColorAnimation {
                 duration: AppStyle.durationFast
+                easing.type: Easing.OutCubic
             }
         }
 
@@ -150,14 +152,14 @@ ComboBox {
                 property: "opacity"
                 from: 0
                 to: 1
-                duration: 120
+                duration: AppStyle.durationFast
                 easing.type: Easing.OutCubic
             }
             NumberAnimation {
                 property: "scale"
                 from: 0.95
                 to: 1
-                duration: 120
+                duration: AppStyle.durationFast
                 easing.type: Easing.OutCubic
             }
         }
@@ -166,13 +168,15 @@ ComboBox {
                 property: "opacity"
                 from: 1
                 to: 0
-                duration: 80
+                duration: AppStyle.durationXFast
+                easing.type: Easing.OutCubic
             }
             NumberAnimation {
                 property: "scale"
                 from: 1
                 to: 0.95
-                duration: 80
+                duration: AppStyle.durationXFast
+                easing.type: Easing.OutCubic
             }
         }
         transformOrigin: Popup.Top
@@ -240,6 +244,7 @@ ComboBox {
             Behavior on color {
                 ColorAnimation {
                     duration: AppStyle.durationNormal
+                    easing.type: Easing.OutCubic
                 }
             }
         }
@@ -267,7 +272,8 @@ ComboBox {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: 100
+                    duration: AppStyle.durationFast
+                    easing.type: Easing.OutCubic
                 }
             }
         }

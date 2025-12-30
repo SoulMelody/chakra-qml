@@ -1,40 +1,39 @@
 module Chakra
 
-singleton AppStyle AppStyle.qml
 singleton AppAnimations AppAnimations.qml
-
-CBox CBox.qml
-CFlex CFlex.qml
-CCenter CCenter.qml
-CContainer CContainer.qml
-CCard CCard.qml
-
-CButton CButton.qml
-CInput CInput.qml
-CCheckbox CCheckbox.qml
-CSwitch CSwitch.qml
-CSelect CSelect.qml
-CSegmentedControl CSegmentedControl.qml
-
-CScrollArea CScrollArea.qml
-CScrollBar CScrollBar.qml
-CPagination CPagination.qml
-
+singleton AppStyle AppStyle.qml
+CActionBar CActionBar.qml
 CAlert CAlert.qml
 CBadge CBadge.qml
-CTag CTag.qml
-CSpinner CSpinner.qml
-CProgress CProgress.qml
-
-CWindow CWindow.qml
+CBox CBox.qml
+CButton CButton.qml
+CCard CCard.qml
+CCenter CCenter.qml
+CCheckbox CCheckbox.qml
+CContainer CContainer.qml
 CDialog CDialog.qml
 CDrawer CDrawer.qml
-CTooltip CTooltip.qml
-CActionBar CActionBar.qml
+CFlex CFlex.qml
+CFlow CFlow.qml
+CGridView CGridView.qml
+CHoverCard CHoverCard.qml
+CIcon CIcon.qml
+CInput CInput.qml
+CListView CListView.qml
 CMenu CMenu.qml
+CMenuGroup CMenuGroup.qml
 CMenuItem CMenuItem.qml
 CMenuSeparator CMenuSeparator.qml
-CMenuGroup CMenuGroup.qml
-
+CPagination CPagination.qml
+CProgress CProgress.qml
+CScrollArea CScrollArea.qml
+CScrollBar CScrollBar.qml
+CSegmentedControl CSegmentedControl.qml
+CSelect CSelect.qml
+CSpacer CSpacer.qml
+CSpinner CSpinner.qml
+CSwitch CSwitch.qml
+CTag CTag.qml
+CTooltip CTooltip.qml
+CWindow CWindow.qml
 singleton Icons Icons.qml
-CIcon CIcon.qml

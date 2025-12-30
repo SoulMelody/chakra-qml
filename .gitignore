@@ -36,3 +36,9 @@ htmlcov/
 
 # uv
 uv.lock
+
+# Build artifacts (optional, not used currently)
+# *.qrc
+# *_rc.py
+metadata.json
+plugins.qmltypes
