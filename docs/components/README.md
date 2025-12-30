@@ -30,6 +30,8 @@
 
 [CTooltip](./CTooltip.md) - 工具提示组件
 
+[CHoverCard](./CHoverCard.md) - 悬停卡片组件
+
 ## 布局组件
 
 [CBox](./CBox.md) - 盒子布局组件

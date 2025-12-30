@@ -16,6 +16,7 @@ CDrawer CDrawer.qml
 CFlex CFlex.qml
 CFlow CFlow.qml
 CGridView CGridView.qml
+CHoverCard CHoverCard.qml
 CIcon CIcon.qml
 CInput CInput.qml
 CListView CListView.qml

@@ -105,6 +105,7 @@ CWindow {
             DemoBadgeTags {}
             DemoProgress {}
             DemoTooltip {}
+            DemoHoverCard {}
             DemoMenu {}
             DemoCards {}
             DemoLayouts {}
