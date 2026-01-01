@@ -19,6 +19,7 @@ CSwitch {
 |--------|------|--------|------|
 | colorScheme | string | "primary" | 颜色方案 |
 | size | string | "md" | 尺寸，可选 "sm" / "md" / "lg" |
+| isDisabled | bool | false | 是否禁用 |
 | trackLabelOn | string | "" | 开启时轨道上显示的文字 |
 | trackLabelOff | string | "" | 关闭时轨道上显示的文字 |
 | thumbIconOn | string | "" | 开启时滑块上的图标 |

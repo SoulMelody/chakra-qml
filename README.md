@@ -6,7 +6,7 @@ English | [简体中文](README.zh-CN.md)
 
 ## Features
 
-- 🎨 **29 Components** - Buttons, Inputs, Cards, Menus, Dialogs and more
+- 🎨 **35+ Components** - Buttons, Inputs, Cards, Menus, Dialogs and more
 - 🌓 **Dark Mode** - Built-in theme system with light/dark modes
 - ⚡ **High Performance** - Optimized rendering with minimal overhead
 - 🪟 **Frameless Window** - Native Windows DWM shadow and custom title bar
@@ -79,8 +79,10 @@ CWindow {
 ### Layout
 - `CBox` - Flexible container with styling props
 - `CFlex` - Flexbox layout container
+- `CFlow` - Flow layout for wrapping items
 - `CCenter` - Center alignment container
 - `CContainer` - Responsive container with max-width
+- `CSpacer` - Flexible spacer component
 
 ### Forms
 - `CButton` - Versatile button with variants and sizes
@@ -95,26 +97,33 @@ CWindow {
 - `CTag` - Removable tag component
 - `CProgress` - Progress bar with variants
 - `CSpinner` - Loading spinner
+- `CIcon` - Icon component with 1000+ Phosphor icons
 
 ### Feedback
 - `CAlert` - Alert messages with status
 - `CTooltip` - Hover tooltip
+- `CHoverCard` - Hover card with rich content
 
 ### Overlay
 - `CDialog` - Modal dialog
 - `CDrawer` - Side drawer/panel
 - `CMenu` - Dropdown menu
+- `CMenuGroup` - Menu group container
 - `CMenuItem` - Menu item component
+- `CMenuSeparator` - Menu separator
 
 ### Navigation
 - `CPagination` - Pagination controls
 - `CSegmentedControl` - Segmented picker
 
-### Other
-- `CWindow` - Frameless window with native shadow
-- `CIcon` - Icon component with 100+ icons
+### Scrolling
 - `CScrollBar` - Custom scrollbar
 - `CScrollArea` - Scrollable area
+- `CListView` - Optimized list view
+- `CGridView` - Optimized grid view
+
+### Other
+- `CWindow` - Frameless window with native shadow
 - `CActionBar` - Floating action bar
 
 ## Theme Customization
@@ -216,13 +225,12 @@ This library is optimized for performance:
 
 ## Examples
 
-Check the `demo` folder for complete examples:
+Check the `gallery` folder for a complete component showcase, or the `examples` folder for usage examples:
 
 - Basic components showcase
 - Form validation
-- Data tables
+- Icon browser
 - Dashboard layouts
-- Settings pages
 
 ## Requirements
 

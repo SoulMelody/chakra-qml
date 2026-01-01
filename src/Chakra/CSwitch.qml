@@ -24,6 +24,9 @@ Switch {
     // 尺寸: sm, md, lg
     property string size: "md"
 
+    // 是否禁用
+    property bool isDisabled: false
+
     // Track Indicator - 轨道上的指示器
     property string trackLabelOn: ""
     property string trackLabelOff: ""
@@ -31,6 +34,8 @@ Switch {
     // Thumb Indicator - 滑块上的图标
     property string thumbIconOn: ""
     property string thumbIconOff: ""
+
+    enabled: !isDisabled
 
     property color schemeColor: AppStyle.getSchemeColor(colorScheme)
 
