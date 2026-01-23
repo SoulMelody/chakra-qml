@@ -4,15 +4,29 @@
 
 [English](README.md) | 简体中文
 
+## 预览
+
+### 按钮组件
+![按钮组件](img/1.png)
+
+### 输入框组件
+![输入框组件](img/2.png)
+
+### 卡片组件
+![卡片组件](img/3.png)
+
+### 深色模式
+![深色模式](img/4.png)
+
 ## 特性
 
-- 🎨 **35+ 个组件** - 按钮、输入框、卡片、菜单、对话框等
-- 🌓 **深色模式** - 内置主题系统，支持亮色/暗色模式
-- ⚡ **高性能** - 优化的渲染，最小化开销
-- 🪟 **无边框窗口** - 原生 Windows DWM 阴影和自定义标题栏
-- 🎯 **类型安全** - 完整的 PySide6 集成和类型提示
-- 📱 **响应式** - 自适应布局和尺寸系统
-- ♿ **可访问性** - 符合 ARIA 规范的组件（适用时）
+- **35+ 个组件** - 按钮、输入框、卡片、菜单、对话框等
+- **深色模式** - 内置主题系统，支持亮色/暗色模式
+- **高性能** - 优化的渲染，最小化开销
+- **无边框窗口** - 原生 Windows DWM 阴影和自定义标题栏
+- **类型安全** - 完整的 PySide6 集成和类型提示
+- **响应式** - 自适应布局和尺寸系统
+- **可访问性** - 符合 ARIA 规范的组件（适用时）
 
 ## 安装
 
@@ -22,57 +36,17 @@ pip install chakra-qml
 
 ## 快速开始
 
-### 基础用法
-
-```python
-import sys
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
-from chakra import init
-
-QQuickStyle.setStyle("Basic")
-app = QGuiApplication(sys.argv)
-engine = QQmlApplicationEngine()
-init(engine)  # 注册 Chakra 组件
-engine.load("main.qml")
-sys.exit(app.exec())
-```
-
-### QML 示例
+在 QML 文件中导入 Chakra 并使用组件：
 
 ```qml
-import QtQuick
 import Chakra
 
 CWindow {
-    width: 800
-    height: 600
-    title: "我的应用"
-    
-    Column {
-        spacing: 16
-        anchors.centerIn: parent
-        
-        CButton {
-            text: "点击我"
-            colorScheme: "blue"
-            onClicked: console.log("已点击！")
-        }
-        
-        CInput {
-            placeholderText: "输入文本..."
-            variant: "outline"
-        }
-        
-        CCard {
-            title: "欢迎"
-            description: "这是一个 Chakra UI 组件"
-            width: 300
-        }
-    }
+    CButton { text: "点击我" }
 }
 ```
+
+更多完整示例见 `examples/` 文件夹。
 
 ## 可用组件
 
@@ -128,161 +102,30 @@ CWindow {
 
 ## 主题自定义
 
-库使用集中式的 `AppStyle` 单例进行主题管理：
-
-```qml
-// 切换主题
-AppStyle.toggleTheme()
-
-// 检查当前主题
-if (AppStyle.isDark) {
-    // 深色模式
-}
-
-// 访问主题颜色
-color: AppStyle.primaryColor
-color: AppStyle.textColor
-color: AppStyle.backgroundColor
-```
-
-## 组件属性
-
-### CButton
-
-```qml
-CButton {
-    text: "按钮"
-    variant: "solid"        // solid, outline, ghost, link
-    colorScheme: "blue"     // blue, green, red, purple 等
-    size: "md"              // sm, md, lg
-    leftIcon: "check"
-    rightIcon: "arrow-right"
-    isLoading: false
-    fullWidth: false
-}
-```
-
-### CInput
-
-```qml
-CInput {
-    placeholderText: "输入文本"
-    variant: "outline"      // outline, filled, flushed
-    size: "md"              // sm, md, lg
-    isInvalid: false
-    isDisabled: false
-    isClearable: true
-    type: "text"            // text, password
-}
-```
-
-### CCard
-
-```qml
-CCard {
-    title: "卡片标题"
-    description: "卡片描述"
-    variant: "elevated"     // elevated, outline, filled, subtle
-    size: "md"              // sm, md, lg
-    
-    // 自定义内容
-    CButton { text: "操作" }
-}
-```
+库使用集中式的 `AppStyle` 单例进行主题管理。使用 `AppStyle.toggleTheme()` 切换亮色/深色模式。
 
 ## 无边框窗口
 
-创建带原生 Windows 阴影的现代无边框窗口：
-
-```qml
-import Chakra
-
-CWindow {
-    width: 1280
-    height: 800
-    title: "我的应用"
-    
-    showTitleBar: true
-    showThemeToggle: true
-    showMinimize: true
-    showMaximize: true
-    showClose: true
-    shadowEnabled: true     // Windows 上的原生 DWM 阴影
-    
-    // 你的内容在这里
-}
-```
+使用 `CWindow` 组件创建带原生 Windows 阴影的现代无边框窗口。
 
 ## 性能优化
 
 本库针对性能进行了优化：
 
-- ✅ 避免不必要的 `layer.effect` 使用
-- ✅ 高效的属性绑定
-- ✅ `AppStyle` 中缓存的颜色映射
-- ✅ 无边框窗口使用原生 Windows API
-- ✅ 最小化动画开销
-
-## 示例
-
-查看 `gallery` 文件夹获取完整组件展示，或 `examples` 文件夹获取使用示例：
-
-- 基础组件展示
-- 表单验证
-- 图标浏览器
-- 仪表板布局
+- 避免不必要的 `layer.effect` 使用
+- 高效的属性绑定
+- `AppStyle` 中缓存的颜色映射
+- 无边框窗口使用原生 Windows API
+- 最小化动画开销
 
 ## 系统要求
 
 - Python >= 3.8
-- PySide6 >= 6.5.0
-
-## 测试
-
-本库包含针对 QML 组件和 Python 模块的完整测试套件。
-
-### 运行测试
-
-```bash
-# 运行 QML 组件测试
-python tests/run_qml_tests.py
-
-# 运行 Python 单元测试
-python tests/run_python_tests.py
-```
-
-详细测试文档见 [tests/README.md](tests/README.md)。
+- PySide6 >= 6.5.0+
 
 ## 开源协议
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
-
-## 开发
-
-### 从源码构建
-
-```bash
-# 安装依赖
-uv sync --group dev
-
-# 构建 QML 模块（自动生成 qmldir）
-uv run build-chakra
-
-# 打包发布
-uv build
-
-# 本地安装测试
-uv add dist/chakra_qml-*.whl
-```
-
-`build-chakra` 命令会自动：
-- 扫描 `src/Chakra/` 中的所有 `.qml` 文件
-- 检测单例组件（包含 `pragma Singleton` 的文件）
-- 生成 `qmldir` 模块定义文件
-
-## 贡献
-
-欢迎贡献！请随时提交 Pull Request。
 
 ## 致谢
 
