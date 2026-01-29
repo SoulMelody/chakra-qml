@@ -266,7 +266,7 @@ if sys.platform == "win32":
                     return True, result
 
             if self.parent._hitTitleBar():
-                return True, HTCAPTION
+                return False, HTCAPTION
             return True, HTCLIENT
 
         def _getHitTestResult(self, left, right, top, bottom):
@@ -315,6 +315,7 @@ class CFrameless(QQuickItem):
         self._clickTimer = 0
         self._hitTestList = []
         self._disabled = False
+        self._pressed = False
         self._event_filter = FramelessEventFilter(self)
 
     @Property(QQuickItem)
@@ -381,6 +382,7 @@ class CFrameless(QQuickItem):
 
         if eventType == QEvent.Type.MouseButtonRelease:
             self._edges = 0
+            self._pressed = False
             return False
 
         if eventType == QEvent.Type.MouseMove:
@@ -432,13 +434,15 @@ class CFrameless(QQuickItem):
                 else:
                     self.showMaximized()
             else:
-                self.windowObject.startSystemMove()
+                self._pressed = True
 
         return False
 
     def _handleMouseMove(self, event):
         if self._isMaximized() or self._isFullScreen():
             return False
+        if self._pressed:
+            return self.windowObject.startSystemMove()
 
         p = event.position().toPoint()
         win = self.windowObject
