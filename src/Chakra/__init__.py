@@ -76,7 +76,7 @@ def register_types(module_name="Chakra", major_version=1, minor_version=0):
         from chakra import register_types
         register_types()
     """
-    from PySide6.QtQml import qmlRegisterType
+    from PyQt6.QtQml import qmlRegisterType
 
     qmlRegisterType(CFrameless, module_name, major_version, minor_version, "CFrameless")  # type: ignore[call-arg]
 
@@ -116,7 +116,7 @@ def setup(engine=None, module_name="Chakra", major_version=1, minor_version=0):
         minor_version: Minor version (default: 0)
 
     Example:
-        from PySide6.QtQml import QQmlApplicationEngine
+        from PyQt6.QtQml import QQmlApplicationEngine
         from chakra import setup
 
         engine = QQmlApplicationEngine()
@@ -138,7 +138,7 @@ def init(engine, module_name="Chakra", major_version=1, minor_version=0):
         minor_version: Minor version (default: 0)
 
     Example:
-        from PySide6.QtQml import QQmlApplicationEngine
+        from PyQt6.QtQml import QQmlApplicationEngine
         from chakra import init
 
         engine = QQmlApplicationEngine()

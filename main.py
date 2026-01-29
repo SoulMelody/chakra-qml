@@ -1,13 +1,14 @@
+import os
 import sys
 from pathlib import Path
-from PySide6.QtCore import qInstallMessageHandler, QDir, QObject, Slot
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine, qmlRegisterType
-from PySide6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtCore import qInstallMessageHandler, QDir, QObject
+from PyQt6.QtCore import pyqtSlot as Slot
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine, qmlRegisterType
 
 from src.Chakra.CFrameless import CFrameless
 
-QQuickStyle.setStyle("Basic")
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Basic"
 
 
 class ClipboardHelper(QObject):

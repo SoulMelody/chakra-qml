@@ -1,11 +1,11 @@
+import os
 import sys
 from pathlib import Path
 import chakra
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
 
-QQuickStyle.setStyle("Basic")
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Basic"
 app = QGuiApplication(sys.argv)
 engine = QQmlApplicationEngine()
 chakra.init(engine)

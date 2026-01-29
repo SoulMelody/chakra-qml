@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "pyside6>=6.5.0",
+    "PyQt6>=6.10.1",
 ]
 
 

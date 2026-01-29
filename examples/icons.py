@@ -1,8 +1,8 @@
 import sys
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
-from PySide6.QtCore import QObject, Slot
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
+from PyQt6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtCore import QObject, Slot
 from chakra import setup
 
 QQuickStyle.setStyle("Basic")

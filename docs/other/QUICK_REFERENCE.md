@@ -653,7 +653,7 @@ CButton { text: "按钮" }
 ### Python 中初始化
 
 ```python
-from PySide6.QtQml import QQmlApplicationEngine
+from PyQt6.QtQml import QQmlApplicationEngine
 from chakra_ui import init
 
 engine = QQmlApplicationEngine()

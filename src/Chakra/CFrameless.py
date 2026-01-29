@@ -1,17 +1,17 @@
 import sys
-from PySide6.QtCore import (
-    Signal,
-    Slot,
+from PyQt6.QtCore import (
     Qt,
     QEvent,
     QAbstractNativeEventFilter,
-    Property,
     QRectF,
     QDateTime,
     QPointF,
 )
-from PySide6.QtGui import QMouseEvent, QGuiApplication, QCursor
-from PySide6.QtQuick import QQuickItem, QQuickWindow
+from PyQt6.QtCore import pyqtProperty as Property
+from PyQt6.QtCore import pyqtSignal as Signal
+from PyQt6.QtCore import pyqtSlot as Slot
+from PyQt6.QtGui import QGuiApplication, QCursor
+from PyQt6.QtQuick import QQuickItem, QQuickWindow
 
 # Qt 边缘枚举值（Qt.Edge 枚举的值）
 TOP_EDGE = 0x00001
@@ -180,19 +180,151 @@ if sys.platform == "win32":
         signed = c_int(c_uint16(value).value).value
         return signed - 65536 if signed > 32767 else signed
 
+    class FramelessEventFilter(QAbstractNativeEventFilter):
+        def __init__(self, parent=None):
+            super().__init__()
+            self.parent = parent
 
-class CFrameless(QQuickItem, QAbstractNativeEventFilter):
+        def nativeEventFilter(self, eventType, message):
+            if sys.platform != "win32":
+                return False, 0
+
+            if eventType != qtNativeEventType or message is None:
+                return False, 0
+
+            msg = MSG.from_address(message.__int__())
+            hwnd = msg.hWnd
+
+            if hwnd is None or hwnd != self.parent._current:
+                return False, 0
+
+            uMsg = msg.message
+
+            if uMsg == WM_WINDOWPOSCHANGING:
+                return self._handleWindowPosChanging(msg.lParam)
+
+            if uMsg == WM_NCCALCSIZE:
+                return self._handleNcCalcSize(hwnd, msg.wParam, msg.lParam)
+
+            if uMsg == WM_NCHITTEST:
+                return self._handleNcHitTest(hwnd, msg.lParam)
+
+            if uMsg == WM_GETMINMAXINFO:
+                return self._handleGetMinMaxInfo(msg.lParam)
+
+            return False, 0
+
+        def _handleWindowPosChanging(self, lParam):
+            wp = cast(lParam, POINTER(PWINDOWPOS)).contents
+            if wp is not None and ((wp.flags & SWP_NOZORDER) == 0):
+                wp.flags |= SWP_NOACTIVATE
+            return False, 0
+
+        def _handleNcCalcSize(self, hwnd, wParam, lParam):
+            if wParam and lParam:
+                isMaximum = bool(IsZoomed(hwnd))
+                if isMaximum:
+                    params = cast(lParam, LPNCCALCSIZE_PARAMS).contents
+                    frameX = GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(
+                        SM_CXPADDEDBORDER
+                    )
+                    frameY = GetSystemMetrics(SM_CYFRAME) + GetSystemMetrics(
+                        SM_CXPADDEDBORDER
+                    )
+
+                    params.rgrc[0].left += frameX
+                    params.rgrc[0].top += frameY
+                    params.rgrc[0].right -= frameX
+                    params.rgrc[0].bottom -= frameY
+                return True, 0
+            return False, 0
+
+        def _handleNcHitTest(self, hwnd, lParam):
+            # 修复副屏坐标溢出：使用有符号整数处理负坐标
+            x_signed = toSignedInt16(LOWORD(lParam))
+            y_signed = toSignedInt16(HIWORD(lParam))
+
+            nativeLocalPos = POINT(x_signed, y_signed)
+            ScreenToClient(hwnd, byref(nativeLocalPos))
+
+            pixelRatio = self.parent.windowObject.devicePixelRatio()
+            logicalX = nativeLocalPos.x / pixelRatio
+            logicalY = nativeLocalPos.y / pixelRatio
+
+            clientWidth = self.parent.windowObject.width()
+            clientHeight = self.parent.windowObject.height()
+            margins = self.parent._margins
+
+            left = logicalX < margins
+            right = logicalX > clientWidth - margins
+            top = logicalY < margins
+            bottom = logicalY > clientHeight - margins
+
+            if not self.parent._isFullScreen() and not self.parent._isMaximized():
+                result = self._getHitTestResult(left, right, top, bottom)
+                if result != 0:
+                    return True, result
+
+            if self.parent._hitTitleBar():
+                return True, HTCAPTION
+            return True, HTCLIENT
+
+        def _getHitTestResult(self, left, right, top, bottom):
+            """根据边缘位置返回对应的 Hit Test 值"""
+            if left and top:
+                return HTTOPLEFT
+            if left and bottom:
+                return HTBOTTOMLEFT
+            if right and top:
+                return HTTOPRIGHT
+            if right and bottom:
+                return HTBOTTOMRIGHT
+            if left:
+                return HTLEFT
+            if right:
+                return HTRIGHT
+            if top:
+                return HTTOP
+            if bottom:
+                return HTBOTTOM
+            return 0
+
+        def _handleGetMinMaxInfo(self, lParam):
+            minmaxInfo = cast(lParam, POINTER(MINMAXINFO)).contents
+            pixelRatio = self.parent.windowObject.devicePixelRatio()
+            geometry = self.parent.windowObject.screen().availableGeometry()
+            rect = RECT()
+            SystemParametersInfoW(SPI_GETWORKAREA, 0, byref(rect), 0)
+            minmaxInfo.ptMaxPosition.x = rect.left
+            minmaxInfo.ptMaxPosition.y = rect.top
+            minmaxInfo.ptMaxSize.x = int(geometry.width() * pixelRatio)
+            minmaxInfo.ptMaxSize.y = int(geometry.height() * pixelRatio)
+            return False, 0
+
+
+class CFrameless(QQuickItem):
     disabledChanged = Signal()
+    windowChanged = Signal()
 
-    def __init__(self):
-        QQuickItem.__init__(self)
-        QAbstractNativeEventFilter.__init__(self)
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self._window = None
         self._current = 0
         self._edges = 0
         self._margins = 4  # 减小调整大小的敏感区域
         self._clickTimer = 0
         self._hitTestList = []
         self._disabled = False
+        self._event_filter = FramelessEventFilter(self)
+
+    @Property(QQuickItem)
+    def windowObject(self):
+        return self._window
+
+    @windowObject.setter
+    def windowObject(self, value):
+        self._window = value
+        self.windowChanged.emit()
 
     @Property(bool, notify=disabledChanged)
     def disabled(self):
@@ -207,13 +339,13 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
     def onDestruction(self):
         app = QGuiApplication.instance()
         if app is not None:
-            app.removeNativeEventFilter(self)
+            app.removeNativeEventFilter(self._event_filter)
 
     @Slot()
     def refreshShadow(self):
         """窗口重新显示时刷新 DWM 阴影"""
-        if sys.platform == "win32" and self.window():
-            hwnd = self.window().winId()
+        if sys.platform == "win32" and self.windowObject:
+            hwnd = int(self.windowObject.winId())
             if hwnd:
                 applyFramelessStyle(hwnd)
                 self._current = hwnd
@@ -222,140 +354,24 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
         if self._disabled:
             return
 
-        self._current = self.window().winId()
-        self.window().setFlags(
-            self.window().flags()
+        self._current = int(self.windowObject.winId())
+        self.windowObject.setFlags(
+            self.windowObject.flags()
             | Qt.WindowType.CustomizeWindowHint
             | Qt.WindowType.WindowMinimizeButtonHint
             | Qt.WindowType.WindowMaximizeButtonHint
             | Qt.WindowType.WindowCloseButtonHint
         )
-        self.window().installEventFilter(self)
+        self.windowObject.installEventFilter(self)
 
         if sys.platform == "win32":
             app = QGuiApplication.instance()
             if app is not None:
-                app.installNativeEventFilter(self)
-            applyFramelessStyle(self.window().winId())
-
-    def nativeEventFilter(self, eventType, message):
-        if sys.platform != "win32":
-            return False, 0
-
-        if eventType != qtNativeEventType or message is None:
-            return False, 0
-
-        msg = MSG.from_address(message.__int__())
-        hwnd = msg.hWnd
-
-        if hwnd is None or hwnd != self._current:
-            return False, 0
-
-        uMsg = msg.message
-
-        if uMsg == WM_WINDOWPOSCHANGING:
-            return self._handleWindowPosChanging(msg.lParam)
-
-        if uMsg == WM_NCCALCSIZE:
-            return self._handleNcCalcSize(hwnd, msg.wParam, msg.lParam)
-
-        if uMsg == WM_NCHITTEST:
-            return self._handleNcHitTest(hwnd, msg.lParam)
-
-        if uMsg == WM_GETMINMAXINFO:
-            return self._handleGetMinMaxInfo(msg.lParam)
-
-        return False, 0
-
-    def _handleWindowPosChanging(self, lParam):
-        wp = cast(lParam, POINTER(PWINDOWPOS)).contents
-        if wp is not None and ((wp.flags & SWP_NOZORDER) == 0):
-            wp.flags |= SWP_NOACTIVATE
-        return False, 0
-
-    def _handleNcCalcSize(self, hwnd, wParam, lParam):
-        if wParam and lParam:
-            isMaximum = bool(IsZoomed(hwnd))
-            if isMaximum:
-                params = cast(lParam, LPNCCALCSIZE_PARAMS).contents
-                frameX = GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(
-                    SM_CXPADDEDBORDER
-                )
-                frameY = GetSystemMetrics(SM_CYFRAME) + GetSystemMetrics(
-                    SM_CXPADDEDBORDER
-                )
-
-                params.rgrc[0].left += frameX
-                params.rgrc[0].top += frameY
-                params.rgrc[0].right -= frameX
-                params.rgrc[0].bottom -= frameY
-            return True, 0
-        return False, 0
-
-    def _handleNcHitTest(self, hwnd, lParam):
-        # 修复副屏坐标溢出：使用有符号整数处理负坐标
-        x_signed = toSignedInt16(LOWORD(lParam))
-        y_signed = toSignedInt16(HIWORD(lParam))
-
-        nativeLocalPos = POINT(x_signed, y_signed)
-        ScreenToClient(hwnd, byref(nativeLocalPos))
-
-        pixelRatio = self.window().devicePixelRatio()
-        logicalX = nativeLocalPos.x / pixelRatio
-        logicalY = nativeLocalPos.y / pixelRatio
-
-        clientWidth = self.window().width()
-        clientHeight = self.window().height()
-        margins = self._margins
-
-        left = logicalX < margins
-        right = logicalX > clientWidth - margins
-        top = logicalY < margins
-        bottom = logicalY > clientHeight - margins
-
-        if not self._isFullScreen() and not self._isMaximized():
-            result = self._getHitTestResult(left, right, top, bottom)
-            if result != 0:
-                return True, result
-
-        if self._hitTitleBar():
-            return True, HTCAPTION
-        return True, HTCLIENT
-
-    def _getHitTestResult(self, left, right, top, bottom):
-        """根据边缘位置返回对应的 Hit Test 值"""
-        if left and top:
-            return HTTOPLEFT
-        if left and bottom:
-            return HTBOTTOMLEFT
-        if right and top:
-            return HTTOPRIGHT
-        if right and bottom:
-            return HTBOTTOMRIGHT
-        if left:
-            return HTLEFT
-        if right:
-            return HTRIGHT
-        if top:
-            return HTTOP
-        if bottom:
-            return HTBOTTOM
-        return 0
-
-    def _handleGetMinMaxInfo(self, lParam):
-        minmaxInfo = cast(lParam, POINTER(MINMAXINFO)).contents
-        pixelRatio = self.window().devicePixelRatio()
-        geometry = self.window().screen().availableGeometry()
-        rect = RECT()
-        SystemParametersInfoW(SPI_GETWORKAREA, 0, byref(rect), 0)
-        minmaxInfo.ptMaxPosition.x = rect.left
-        minmaxInfo.ptMaxPosition.y = rect.top
-        minmaxInfo.ptMaxSize.x = int(geometry.width() * pixelRatio)
-        minmaxInfo.ptMaxSize.y = int(geometry.height() * pixelRatio)
-        return False, 0
+                app.installNativeEventFilter(self._event_filter)
+            applyFramelessStyle(int(self.windowObject.winId()))
 
     def eventFilter(self, watched, event):
-        if self.window() is None:
+        if self.windowObject is None:
             return False
 
         eventType = event.type()
@@ -375,35 +391,35 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
     @Slot()
     def showMaximized(self):
         if sys.platform == "win32":
-            hwnd = self.window().winId()
+            hwnd = int(self.windowObject.winId())
             user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
         else:
-            self.window().showMaximized()
+            self.windowObject.showMaximized()
 
     @Slot()
     def showMinimized(self):
         if sys.platform == "win32":
-            hwnd = self.window().winId()
+            hwnd = int(self.windowObject.winId())
             user32.ShowWindow(hwnd, SW_SHOWMINIMIZED)
         else:
-            self.window().showMinimized()
+            self.windowObject.showMinimized()
 
     @Slot()
     def showNormal(self):
         if sys.platform == "win32":
-            hwnd = self.window().winId()
+            hwnd = int(self.windowObject.winId())
             user32.ShowWindow(hwnd, SW_SHOWNORMAL)
         else:
-            self.window().showNormal()
+            self.windowObject.showNormal()
 
     def _handleMouseButtonPress(self, event):
-        mouseEvent = QMouseEvent(event)
+        mouseEvent = event
         if mouseEvent.button() != Qt.MouseButton.LeftButton:
             return False
 
         if self._edges != 0:
             self._updateCursor(self._edges)
-            self.window().startSystemResize(Qt.Edge(self._edges))
+            self.windowObject.startSystemResize(Qt.Edge(self._edges))
             return False
 
         if self._hitTitleBar():
@@ -416,7 +432,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
                 else:
                     self.showMaximized()
             else:
-                self.window().startSystemMove()
+                self.windowObject.startSystemMove()
 
         return False
 
@@ -424,8 +440,8 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
         if self._isMaximized() or self._isFullScreen():
             return False
 
-        p = QMouseEvent(event).position().toPoint()
-        win = self.window()
+        p = event.position().toPoint()
+        win = self.windowObject
         margins = self._margins
 
         # 检查是否在内部区域
@@ -466,7 +482,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
         try:
             if not item or not item.isVisible():
                 return False
-            point = item.window().mapFromGlobal(QCursor.pos())
+            point = item.window().mapFromGlobal(QCursor.pos()).toPointF()
             rect = QRectF(
                 item.mapToItem(item.window().contentItem(), QPointF(0, 0)), item.size()
             )
@@ -477,10 +493,10 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
             return False
 
     def _isFullScreen(self):
-        return self.window().visibility() == QQuickWindow.Visibility.FullScreen
+        return self.windowObject.visibility() == QQuickWindow.Visibility.FullScreen
 
     def _isMaximized(self):
-        return self.window().visibility() == QQuickWindow.Visibility.Maximized
+        return self.windowObject.visibility() == QQuickWindow.Visibility.Maximized
 
     def _updateCursor(self, edges):
         cursorMap = {
@@ -494,14 +510,14 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
             RIGHT_EDGE | TOP_EDGE: Qt.CursorShape.SizeBDiagCursor,
             LEFT_EDGE | BOTTOM_EDGE: Qt.CursorShape.SizeBDiagCursor,
         }
-        self.window().setCursor(cursorMap.get(edges, Qt.CursorShape.ArrowCursor))
+        self.windowObject.setCursor(cursorMap.get(edges, Qt.CursorShape.ArrowCursor))
 
     def _hitTitleBar(self):
         for item in self._hitTestList:
             if self._containsCursorToItem(item):
                 return False
 
-        titleBar = self.window().property("titleBarItem")
+        titleBar = self.windowObject.property("titleBarItem")
         if titleBar and self._containsCursorToItem(titleBar):
             return True
         return False

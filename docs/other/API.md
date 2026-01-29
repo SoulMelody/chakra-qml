@@ -5,13 +5,13 @@
 ### 最简使用方式（推荐）
 
 ```python
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQuickControls2 import QQuickStyle
+import os
+from PyQt6.QtQml import QQmlApplicationEngine
+from PyQt6.QtGui import QGuiApplication
 from chakra import setup
 import sys
 
-QQuickStyle.setStyle("Basic")  # 必须！允许自定义组件外观
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Basic"  # 必须！允许自定义组件外观
 
 app = QGuiApplication(sys.argv)
 engine = QQmlApplicationEngine()
@@ -139,7 +139,7 @@ add_import_path(engine)
 
 ```python
 from chakra import CFrameless
-from PySide6.QtQml import qmlRegisterType
+from PyQt6.QtQml import qmlRegisterType
 
 # 手动注册（通常不需要，setup() 已自动注册）
 qmlRegisterType(CFrameless, "Chakra", 1, 0, "CFrameless")
@@ -218,7 +218,7 @@ add_import_path(engine)  # 后添加路径
 
 ```python
 from chakra import CFrameless
-from PySide6.QtQml import qmlRegisterType
+from PyQt6.QtQml import qmlRegisterType
 
 qmlRegisterType(CFrameless, "Chakra", 1, 0, "CFrameless")
 engine.addImportPath(...)
@@ -260,10 +260,10 @@ import "qrc:/Chakra"     // 不要使用 qrc 路径
 ```python
 import sys
 from pathlib import Path
-from PySide6.QtCore import QDir
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtCore import QDir
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
+from PyQt6.QtQuickControls2 import QQuickStyle
 from chakra import setup
 
 QQuickStyle.setStyle("Basic")  # 必须在 QGuiApplication 前设置

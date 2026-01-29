@@ -2,9 +2,9 @@ import sys
 import unittest
 from pathlib import Path
 from unittest.mock import Mock
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQuick import QQuickWindow
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQuick import QQuickWindow
 
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root / "src" / "components"))

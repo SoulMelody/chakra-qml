@@ -17,7 +17,7 @@ QML 的 `print()` 通过 Qt 的日志系统（qDebug）输出，Windows 控制�
 在 `main.py` 中使用 `qInstallMessageHandler` 自定义消息处理器：
 
 ```python
-from PySide6.QtCore import qInstallMessageHandler
+from PyQt6.QtCore import qInstallMessageHandler
 
 def message_handler(mode, context, message):
     print(message)
@@ -29,9 +29,9 @@ qInstallMessageHandler(message_handler)
 
 ```python
 import sys
-from PySide6.QtCore import qInstallMessageHandler
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
+from PyQt6.QtCore import qInstallMessageHandler
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
 
 def message_handler(mode, context, message):
     print(message)

@@ -1,16 +1,16 @@
+import os
 import sys
 from pathlib import Path
-from PySide6.QtCore import QDir
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtCore import QDir
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 QDir.setCurrent(str(project_root))
 
 
-QQuickStyle.setStyle("Basic")
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Basic"
 
 app = QGuiApplication(sys.argv)
 

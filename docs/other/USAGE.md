@@ -11,13 +11,13 @@ pip install chakra-qtquick
 ### 1. 创建 Python 主文件 (main.py)
 
 ```python
+import os
 import sys
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtQuickControls2 import QQuickStyle
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtQml import QQmlApplicationEngine
 from chakra_ui import init
 
-QQuickStyle.setStyle("Basic")
+os.environ["QT_QUICK_CONTROLS_STYLE"] = "Basic"
 
 app = QGuiApplication(sys.argv)
 engine = QQmlApplicationEngine()

@@ -43,6 +43,7 @@ ApplicationWindow {
     CFrameless {
         id: frameless
         disabled: false
+        windowObject: window
 
         Component.onCompleted: {
             window.titleBarItem = titleBar;
