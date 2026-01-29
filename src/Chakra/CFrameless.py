@@ -72,6 +72,10 @@ if sys.platform == "win32":
     SM_CYFRAME = 33
     SM_CXPADDEDBORDER = 92
 
+    SW_SHOWMAXIMIZED = 3
+    SW_SHOWMINIMIZED = 2
+    SW_SHOWNORMAL = 1
+
     def HIWORD(dword):
         return c_uint16((dword >> 16) & 0xFFFF).value
 
@@ -368,6 +372,30 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
 
         return False
 
+    @Slot()
+    def showMaximized(self):
+        if sys.platform == "win32":
+            hwnd = self.window().winId()
+            user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
+        else:
+            self.window().showMaximized()
+
+    @Slot()
+    def showMinimized(self):
+        if sys.platform == "win32":
+            hwnd = self.window().winId()
+            user32.ShowWindow(hwnd, SW_SHOWMINIMIZED)
+        else:
+            self.window().showMinimized()
+
+    @Slot()
+    def showNormal(self):
+        if sys.platform == "win32":
+            hwnd = self.window().winId()
+            user32.ShowWindow(hwnd, SW_SHOWNORMAL)
+        else:
+            self.window().showNormal()
+
     def _handleMouseButtonPress(self, event):
         mouseEvent = QMouseEvent(event)
         if mouseEvent.button() != Qt.MouseButton.LeftButton:
@@ -384,9 +412,9 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
             self._clickTimer = clickTimer
             if offset < 300:
                 if self._isMaximized():
-                    self.window().showNormal()
+                    self.showNormal()
                 else:
-                    self.window().showMaximized()
+                    self.showMaximized()
             else:
                 self.window().startSystemMove()
 
