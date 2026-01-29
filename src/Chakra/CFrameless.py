@@ -193,6 +193,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
         self._clickTimer = 0
         self._hitTestList = []
         self._disabled = False
+        self._pressed = False
 
     @Property(bool, notify=disabledChanged)
     def disabled(self):
@@ -319,7 +320,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
                 return True, result
 
         if self._hitTitleBar():
-            return True, HTCAPTION
+            return False, HTCAPTION
         return True, HTCLIENT
 
     def _getHitTestResult(self, left, right, top, bottom):
@@ -365,6 +366,7 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
 
         if eventType == QEvent.Type.MouseButtonRelease:
             self._edges = 0
+            self._pressed = False
             return False
 
         if eventType == QEvent.Type.MouseMove:
@@ -416,13 +418,15 @@ class CFrameless(QQuickItem, QAbstractNativeEventFilter):
                 else:
                     self.showMaximized()
             else:
-                self.window().startSystemMove()
+                self._pressed = True
 
         return False
 
     def _handleMouseMove(self, event):
         if self._isMaximized() or self._isFullScreen():
             return False
+        if self._pressed:
+            return self.window().startSystemMove()
 
         p = QMouseEvent(event).position().toPoint()
         win = self.window()
